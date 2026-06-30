@@ -24,7 +24,7 @@ const styles = {
   title: {
     fontSize: "1.5rem",
     fontWeight: "700",
-    color: "#0369a1",
+    color: "#f597a0",
     marginBottom: "1.5rem",
   },
   card: {
@@ -50,6 +50,14 @@ const styles = {
     borderRadius: "8px",
     fontSize: "0.95rem",
     outline: "none",
+  },
+  fileInput: {
+    width: "100%",
+    padding: "0.6rem 0.9rem",
+    border: "1.5px solid #e2e8f0",
+    borderRadius: "8px",
+    fontSize: "0.9rem",
+    backgroundColor: "white",
   },
   select: {
     width: "100%",
@@ -78,7 +86,7 @@ const styles = {
   submitBtn: {
     flex: 1,
     padding: "0.75rem",
-    backgroundColor: "#0ea5e9",
+    backgroundColor: "#32d5d5",
     color: "white",
     border: "none",
     borderRadius: "8px",
@@ -120,6 +128,7 @@ export default function ProductForm() {
     category: "Otros",
     imageUrl: "",
   });
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -145,21 +154,42 @@ export default function ProductForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // 📌 NUEVO: manejar archivo
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      setForm((prev) => ({
+        ...prev,
+        imageUrl: reader.result, // base64
+      }));
+    };
+
+    reader.readAsDataURL(file);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
     try {
       const data = {
         ...form,
         price: parseFloat(form.price),
         stock: parseInt(form.stock, 10),
       };
+
       if (isEditing) {
         await updateProduct(id, data);
       } else {
         await createProduct(data);
       }
+
       navigate("/products");
     } catch (err) {
       setError(err.response?.data?.message || "Error al guardar el producto");
@@ -185,7 +215,6 @@ export default function ProductForm() {
               value={form.name}
               onChange={handleChange}
               required
-              placeholder="Ej: Cepillo eléctrico Oral-B"
               style={styles.input}
             />
           </div>
@@ -196,46 +225,30 @@ export default function ProductForm() {
               name="description"
               value={form.description}
               onChange={handleChange}
-              placeholder="Descripción del producto..."
               style={styles.textarea}
             />
           </div>
 
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "1rem",
-            }}
-          >
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Precio ($) *</label>
-              <input
-                type="number"
-                name="price"
-                value={form.price}
-                onChange={handleChange}
-                required
-                min="0"
-                step="0.01"
-                placeholder="0.00"
-                style={styles.input}
-              />
-            </div>
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Precio *</label>
+            <input
+              type="number"
+              name="price"
+              value={form.price}
+              onChange={handleChange}
+              style={styles.input}
+            />
+          </div>
 
-            <div style={styles.formGroup}>
-              <label style={styles.label}>Stock *</label>
-              <input
-                type="number"
-                name="stock"
-                value={form.stock}
-                onChange={handleChange}
-                required
-                min="0"
-                placeholder="0"
-                style={styles.input}
-              />
-            </div>
+          <div style={styles.formGroup}>
+            <label style={styles.label}>Stock *</label>
+            <input
+              type="number"
+              name="stock"
+              value={form.stock}
+              onChange={handleChange}
+              style={styles.input}
+            />
           </div>
 
           <div style={styles.formGroup}>
@@ -255,13 +268,12 @@ export default function ProductForm() {
           </div>
 
           <div style={styles.formGroup}>
-            <label style={styles.label}>URL de imagen (opcional)</label>
+            <label style={styles.label}>Imagen del producto</label>
             <input
-              name="imageUrl"
-              value={form.imageUrl}
-              onChange={handleChange}
-              placeholder="https://..."
-              style={styles.input}
+              type="file"
+              accept="image/*"
+              onChange={handleImage}
+              style={styles.fileInput}
             />
           </div>
 
@@ -273,12 +285,9 @@ export default function ProductForm() {
             >
               Cancelar
             </button>
+
             <button type="submit" style={styles.submitBtn} disabled={loading}>
-              {loading
-                ? "Guardando..."
-                : isEditing
-                  ? "Guardar cambios"
-                  : "Crear producto"}
+              {loading ? "Guardando..." : isEditing ? "Guardar" : "Crear"}
             </button>
           </div>
         </form>

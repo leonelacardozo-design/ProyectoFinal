@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/api";
+import logo from "../assets/logo.png";
+import { useNavigate, Link } from "react-router-dom";
 
 const styles = {
   container: {
@@ -22,13 +23,17 @@ const styles = {
     textAlign: "center",
     marginBottom: "1.5rem",
   },
-  logoIcon: {
-    fontSize: "3rem",
+  logoImg: {
+    width: "70px",
+    height: "70px",
+    objectFit: "cover",
+    borderRadius: "12px",
+    marginBottom: "0.5rem",
   },
   title: {
     fontSize: "1.6rem",
     fontWeight: "700",
-    color: "#0369a1",
+    color: "#f597a0",
     margin: "0.5rem 0 0.3rem",
   },
   subtitle: {
@@ -56,7 +61,7 @@ const styles = {
   button: {
     width: "100%",
     padding: "0.75rem",
-    backgroundColor: "#0ea5e9",
+    backgroundColor: "#32d5d5",
     color: "white",
     border: "none",
     borderRadius: "8px",
@@ -104,9 +109,11 @@ export default function Login() {
     <div style={styles.container}>
       <div style={styles.card}>
         <div style={styles.logo}>
-          <div style={styles.logoIcon}>🦷</div>
+          <img src={logo} alt="Logo" style={styles.logoImg} />
           <h1 style={styles.title}>Smile Together</h1>
-          <p style={styles.subtitle}>Panel de Administración</p>
+          <p style={styles.subtitle}>
+            Accede a nuestros productos ingresando aquí
+          </p>
         </div>
 
         {error && <div style={styles.error}>{error}</div>}
@@ -136,6 +143,27 @@ export default function Login() {
             {loading ? "Iniciando sesión..." : "Iniciar sesión"}
           </button>
         </form>
+
+        <div
+          style={{
+            textAlign: "center",
+            marginTop: "1.2rem",
+            fontSize: "0.88rem",
+            color: "#64748b",
+          }}
+        >
+          ¿No tenés cuenta?{" "}
+          <Link
+            to="/register"
+            style={{
+              color: "#0ea5e9",
+              fontWeight: "600",
+              textDecoration: "none",
+            }}
+          >
+            Registrate
+          </Link>
+        </div>
       </div>
     </div>
   );

@@ -26,11 +26,11 @@ const styles = {
   title: {
     fontSize: "1.5rem",
     fontWeight: "700",
-    color: "#0369a1",
+    color: "#f597a0",
   },
   newBtn: {
     padding: "0.65rem 1.3rem",
-    backgroundColor: "#0ea5e9",
+    backgroundColor: "#32d5d5",
     color: "white",
     border: "none",
     borderRadius: "8px",
