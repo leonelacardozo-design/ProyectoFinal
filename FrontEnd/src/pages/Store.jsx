@@ -43,8 +43,24 @@ const styles = {
     padding: "1rem",
     boxSizing: "border-box",
   },
-  title: { fontSize: "clamp(1.1rem, 3.5vw, 2.2rem)", fontWeight: 600 },
-  subtitle: { fontSize: "clamp(0.85rem, 2.5vw, 1.3rem)", maxWidth: "650px" },
+  textBlock: {
+    marginTop: "auto",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  title: {
+    fontSize: "clamp(1.1rem, 3.5vw, 2.2rem)",
+    fontWeight: "600",
+    marginBottom: "0.3rem",
+    lineHeight: 1.2,
+  },
+  subtitle: {
+    fontSize: "clamp(0.85rem, 2.5vw, 1.5rem)",
+    maxWidth: "650px",
+    opacity: 0.95,
+    padding: "0 1rem",
+  },
   container: {
     maxWidth: "1100px",
     margin: "0 auto",
@@ -446,11 +462,13 @@ export default function Store() {
           <div style={styles.overlay}>
             <img
               src={logo}
-              style={{ width: "clamp(140px, 30vw, 300px)" }}
+              style={{ width: "clamp(140px, 30vw, 400px)" }}
               alt="logo"
             />
-            <h1 style={styles.title}>{slides[currentImage].title}</h1>
-            <p style={styles.subtitle}>{slides[currentImage].subtitle}</p>
+            <div style={styles.textBlock}>
+              <h1 style={styles.title}>{slides[currentImage].title}</h1>
+              <p style={styles.subtitle}>{slides[currentImage].subtitle}</p>
+            </div>
           </div>
         </div>
       </div>
