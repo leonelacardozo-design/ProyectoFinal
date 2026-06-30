@@ -154,7 +154,6 @@ export default function ProductForm() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // 📌 NUEVO: manejar archivo
   const handleImage = (e) => {
     const file = e.target.files[0];
 
@@ -165,7 +164,7 @@ export default function ProductForm() {
     reader.onloadend = () => {
       setForm((prev) => ({
         ...prev,
-        imageUrl: reader.result, // base64
+        imageUrl: reader.result,
       }));
     };
 

@@ -5,13 +5,16 @@ import logo from "../assets/logo.png";
 
 const styles = {
   container: {
-    padding: "2rem",
+    padding: "clamp(1rem, 3vw, 2rem)",
     maxWidth: "1100px",
     margin: "0 auto",
+    width: "100%",
+    boxSizing: "border-box",
   },
 
   header: {
     marginBottom: "2rem",
+    textAlign: "center",
   },
 
   logoContainer: {
@@ -22,15 +25,15 @@ const styles = {
   },
 
   logoImg: {
-    width: "240px",
-    height: "240px",
+    width: "clamp(140px, 25vw, 240px)",
+    height: "clamp(140px, 25vw, 240px)",
     objectFit: "cover",
     borderRadius: "14px",
     marginBottom: "0.5rem",
   },
 
   title: {
-    fontSize: "1.8rem",
+    fontSize: "clamp(1.3rem, 3vw, 1.8rem)",
     fontWeight: "700",
     color: "#32d5d5",
     textAlign: "center",
@@ -40,23 +43,26 @@ const styles = {
     color: "#64748b",
     marginTop: "0.3rem",
     textAlign: "center",
+    fontSize: "clamp(0.85rem, 2vw, 1rem)",
   },
 
   cardsGrid: {
     display: "grid",
-    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-    gap: "1.5rem",
+    gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
+    gap: "1rem",
     marginBottom: "2.5rem",
   },
 
   card: {
     backgroundColor: "white",
     borderRadius: "12px",
-    padding: "1.5rem",
+    padding: "1.2rem",
     boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
     display: "flex",
     flexDirection: "column",
-    gap: "0.5rem",
+    gap: "0.4rem",
+    textAlign: "center",
+    alignItems: "center",
   },
 
   cardIcon: {
@@ -64,28 +70,35 @@ const styles = {
   },
 
   cardValue: {
-    fontSize: "2.2rem",
+    fontSize: "clamp(1.6rem, 3vw, 2.2rem)",
     fontWeight: "700",
     color: "#f597a0",
   },
 
   cardLabel: {
     color: "#64748b",
-    fontSize: "0.9rem",
+    fontSize: "0.85rem",
+  },
+
+  actionContainer: {
+    display: "flex",
+    flexWrap: "wrap",
+    gap: "1rem",
+    marginBottom: "2rem",
   },
 
   actionBtn: {
-    display: "inline-block",
-    padding: "0.8rem 1.5rem",
+    flex: "1 1 200px",
+    padding: "0.8rem 1.2rem",
     backgroundColor: "#32d5d5",
     color: "white",
     border: "none",
     borderRadius: "8px",
     fontWeight: "600",
     cursor: "pointer",
-    marginRight: "1rem",
     fontSize: "0.95rem",
     textDecoration: "none",
+    textAlign: "center",
   },
 
   sectionTitle: {
@@ -93,18 +106,20 @@ const styles = {
     fontWeight: "600",
     color: "#334155",
     marginBottom: "1rem",
+    textAlign: "center",
   },
 
   categoryList: {
     display: "flex",
     flexWrap: "wrap",
-    gap: "0.8rem",
+    gap: "0.6rem",
+    justifyContent: "center",
   },
 
   categoryTag: {
     backgroundColor: "#e0f2fe",
     color: "#f597a0",
-    padding: "0.4rem 1rem",
+    padding: "0.4rem 0.9rem",
     borderRadius: "20px",
     fontSize: "0.85rem",
     fontWeight: "500",
@@ -132,11 +147,12 @@ export default function Dashboard() {
   return (
     <div style={styles.container}>
       <div style={styles.header}>
-        <div style={styles.logoContainer}></div>
+        <div style={styles.logoContainer}>
+          <img src={logo} alt="logo" style={styles.logoImg} />
+        </div>
 
-        <h1 style={styles.title}>
-          <span>Inventario de la tienda</span>
-        </h1>
+        <h1 style={styles.title}>Inventario de la tienda</h1>
+        <p style={styles.subtitle}>Panel de control</p>
         <hr />
       </div>
 
@@ -164,9 +180,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div style={{ marginBottom: "2rem" }}>
-        <h2 style={styles.sectionTitle}>Acciones rápidas</h2>
-
+      <div style={styles.actionContainer}>
         <button style={styles.actionBtn} onClick={() => navigate("/products")}>
           Ver todos los productos
         </button>

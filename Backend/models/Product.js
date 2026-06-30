@@ -37,6 +37,6 @@ export const Product = sequelize.define("Product", {
     defaultValue: "Otros",
   },
   imageUrl: {
-    type: DataTypes.STRING,
+    type: DataTypes.TEXT("long"),
   },
 });

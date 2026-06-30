@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { loginUser } from "../services/api";
 import logo from "../assets/logo.png";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const styles = {
   container: {
@@ -10,44 +11,63 @@ const styles = {
     alignItems: "center",
     justifyContent: "center",
     background: "linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 100%)",
+    padding: "1rem",
   },
+
   card: {
     backgroundColor: "white",
     borderRadius: "16px",
-    padding: "2.5rem",
+    padding: "clamp(1.2rem, 4vw, 2.5rem)",
     width: "100%",
     maxWidth: "420px",
     boxShadow: "0 8px 32px rgba(14,165,233,0.15)",
-  },
-  logo: {
     textAlign: "center",
-    marginBottom: "1.5rem",
   },
+
+  logo: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: "1.5rem",
+    width: "100%",
+  },
+
   logoImg: {
-    width: "70px",
-    height: "70px",
+    width: "clamp(120px, 35vw, 200px)",
+    height: "clamp(120px, 35vw, 200px)",
     objectFit: "cover",
     borderRadius: "12px",
     marginBottom: "0.5rem",
+    display: "block",
   },
+
   title: {
-    fontSize: "1.6rem",
+    fontSize: "clamp(1.3rem, 4vw, 1.6rem)",
     fontWeight: "700",
-    color: "#f597a0",
+    color: "#060606",
     margin: "0.5rem 0 0.3rem",
+    textAlign: "center",
+    width: "100%",
   },
+
   subtitle: {
     color: "#64748b",
-    fontSize: "0.9rem",
+    fontSize: "clamp(0.8rem, 2.5vw, 0.9rem)",
     marginBottom: "1.5rem",
+    textAlign: "center",
+    width: "100%",
   },
+
   label: {
     display: "block",
     fontSize: "0.85rem",
     fontWeight: "600",
     color: "#475569",
     marginBottom: "0.3rem",
+    textAlign: "left",
   },
+
   input: {
     width: "100%",
     padding: "0.65rem 0.9rem",
@@ -55,9 +75,9 @@ const styles = {
     borderRadius: "8px",
     fontSize: "0.95rem",
     marginBottom: "1rem",
-    outline: "none",
-    transition: "border-color 0.2s",
+    boxSizing: "border-box",
   },
+
   button: {
     width: "100%",
     padding: "0.75rem",
@@ -70,6 +90,7 @@ const styles = {
     cursor: "pointer",
     marginTop: "0.5rem",
   },
+
   error: {
     backgroundColor: "#fee2e2",
     color: "#991b1b",
@@ -85,16 +106,28 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setLoading(true);
+
     try {
       const res = await loginUser({ email, password });
-      localStorage.setItem("token", res.data.token);
-      navigate("/dashboard");
+
+      const token = res.data.token;
+      const role = res.data.user.role;
+
+      login(token, role);
+
+      if (role === "admin") {
+        navigate("/dashboard");
+      } else {
+        navigate("/store");
+      }
     } catch (err) {
       setError(
         err.response?.data?.message ||
@@ -110,19 +143,17 @@ export default function Login() {
       <div style={styles.card}>
         <div style={styles.logo}>
           <img src={logo} alt="Logo" style={styles.logoImg} />
-          <h1 style={styles.title}>Smile Together</h1>
-          <p style={styles.subtitle}>
-            Accede a nuestros productos ingresando aquí
-          </p>
+          <h1 style={styles.title}>SmileTogether</h1>
+          <p style={styles.subtitle}>Logueate para acceder a la tienda</p>
         </div>
 
         {error && <div style={styles.error}>{error}</div>}
 
         <form onSubmit={handleSubmit}>
           <label style={styles.label}>Correo electrónico</label>
+
           <input
             type="email"
-            placeholder="admin@smiletogether.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -130,9 +161,9 @@ export default function Login() {
           />
 
           <label style={styles.label}>Contraseña</label>
+
           <input
             type="password"
-            placeholder="••••••••"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -153,14 +184,7 @@ export default function Login() {
           }}
         >
           ¿No tenés cuenta?{" "}
-          <Link
-            to="/register"
-            style={{
-              color: "#0ea5e9",
-              fontWeight: "600",
-              textDecoration: "none",
-            }}
-          >
+          <Link to="/register" style={{ color: "#f597a0", fontWeight: "600" }}>
             Registrate
           </Link>
         </div>
