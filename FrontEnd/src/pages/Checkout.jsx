@@ -21,6 +21,7 @@ export default function Checkout() {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const total = useMemo(() => {
     return cart.reduce((sum, item) => {
@@ -43,9 +44,7 @@ export default function Checkout() {
     try {
       const res = await createPaymentPreference(cart);
       if (res.data?.success) {
-        navigate("/store", {
-          state: { orderSuccess: true, orderId: res.data.orderId },
-        });
+        setShowSuccessModal(true);
       } else {
         setError("Hubo un error al procesar la compra. Intentá de nuevo.");
       }
@@ -168,6 +167,45 @@ export default function Checkout() {
       minWidth: "100px",
       padding: "10px",
       backgroundColor: "#e2e8f0",
+      border: "none",
+      borderRadius: "8px",
+      cursor: "pointer",
+      fontWeight: 700,
+      fontSize: "0.95rem",
+    },
+    modalOverlay: {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      background: "rgba(15, 23, 42, 0.5)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      zIndex: 1000,
+      padding: "1rem",
+      boxSizing: "border-box",
+    },
+    modalBox: {
+      background: "white",
+      borderRadius: "12px",
+      padding: "2rem",
+      maxWidth: "400px",
+      width: "100%",
+      textAlign: "center",
+      boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
+    },
+    modalText: {
+      fontSize: "1.1rem",
+      fontWeight: 700,
+      color: "#0f172a",
+      marginBottom: "1.5rem",
+    },
+    modalBtn: {
+      padding: "10px 24px",
+      background: "#32d5d5",
+      color: "white",
       border: "none",
       borderRadius: "8px",
       cursor: "pointer",
@@ -303,6 +341,26 @@ export default function Checkout() {
           </div>
         </div>
       </div>
+
+      {showSuccessModal && (
+        <div style={styles.modalOverlay}>
+          <div style={styles.modalBox}>
+            <p style={styles.modalText}>
+              Tu compra ha sido realizada con éxito.
+            </p>
+            <button
+              style={styles.modalBtn}
+              onClick={() =>
+                navigate("/store", {
+                  state: { orderSuccess: true },
+                })
+              }
+            >
+              Aceptar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
