@@ -45,7 +45,7 @@ const styles = {
   title: {
     fontSize: "clamp(1.3rem, 4vw, 1.6rem)",
     fontWeight: "700",
-    color: "#060606",
+    color: "#f597a0",
     margin: "0.5rem 0 0.3rem",
     textAlign: "center",
     width: "100%",

@@ -20,13 +20,13 @@ app.use("/api/products", productRoutes);
 app.use("/api/payments", paymentRoutes);
 
 app.get("/", (req, res) => {
-  res.json({ message: "Smile Together API funcionando ✓" });
+  res.json({ message: "Smile Together API funcionando" });
 });
 
 sequelize
   .sync({ alter: true })
   .then(() => {
-    console.log("✓ Base de datos conectada y sincronizada");
+    console.log("Base de datos conectada y sincronizada");
     app.listen(PORT, () => {
       console.log(`✓ Servidor corriendo en http://localhost:${PORT}`);
     });
